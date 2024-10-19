@@ -1,0 +1,32 @@
+import { IncomingMessage, ServerResponse } from 'http';
+import { PATH, ERRORS } from './consts';
+import { usersService } from './users';
+import { errorsHandler } from './errorsHandler';
+
+export const requestListener = async (
+  req: IncomingMessage,
+  res: ServerResponse,
+) => {
+  try {
+    if (!req.url) {
+      errorsHandler(ERRORS.SERVICE_NOT_FOUND, res);
+      throw new Error(ERRORS.SERVICE_NOT_FOUND.message);
+    }
+
+    const url = req.url
+      .toLowerCase()
+      .split('/')
+      .filter((part) => !!part)
+      .join('/');
+    const method = req.method?.toLowerCase() || '';
+
+    if (url.startsWith(PATH.USERS)) {
+      usersService(url, method, res);
+    } else {
+      errorsHandler(ERRORS.SERVICE_NOT_FOUND, res, method, url);
+    }
+  } catch (error) {
+    errorsHandler(ERRORS.SERVER_ERROR, res);
+    console.error(error);
+  }
+};
