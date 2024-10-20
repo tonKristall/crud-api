@@ -1,9 +1,9 @@
 import { v4 as uuid } from 'uuid';
-import { users } from '../../db/users';
 import { IncomingMessage, ServerResponse } from 'http';
 import { USER_ERRORS } from './consts';
 import { errorsHandler } from '../errorsHandler';
 import { parseData } from '../../utils';
+import { addUser } from '../../db/users/db';
 
 export const createUser = async (
   req: IncomingMessage,
@@ -26,7 +26,7 @@ export const createUser = async (
       Array.isArray(hobbies)
     ) {
       const user = { id, username, age, hobbies };
-      users.push(user);
+      await addUser(user);
       res.statusCode = 201;
       res.end(JSON.stringify(user));
     } else {

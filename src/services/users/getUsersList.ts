@@ -1,6 +1,7 @@
-import { users } from '../../db/users';
 import { ServerResponse } from 'http';
+import { getUsers } from '../../db/users/db';
 
-export const getUsersList = (res: ServerResponse) => {
+export const getUsersList = async (res: ServerResponse) => {
+  const users = await getUsers();
   res.end(JSON.stringify(users));
 };

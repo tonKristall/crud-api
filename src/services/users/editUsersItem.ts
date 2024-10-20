@@ -1,8 +1,8 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { users } from '../../db/users';
 import { errorsHandler } from '../errorsHandler';
 import { USER_ERRORS } from './consts';
 import { parseData } from '../../utils';
+import { getUser, updateUser } from '../../db/users/db';
 
 export const editUsersItem = async (
   req: IncomingMessage,
@@ -11,9 +11,9 @@ export const editUsersItem = async (
   url: string,
   id: string,
 ) => {
-  const userIndex = users.findIndex((user) => user.id === id);
+  const user = await getUser(id);
 
-  if (userIndex === -1) {
+  if (!user) {
     errorsHandler(USER_ERRORS.FIND, res, method, url);
     return;
   }
@@ -32,7 +32,7 @@ export const editUsersItem = async (
       Array.isArray(hobbies)
     ) {
       const user = { id, username, age, hobbies };
-      users[userIndex] = user;
+      await updateUser(user);
       res.end(JSON.stringify(user));
     } else {
       errorsHandler(USER_ERRORS.CREATE, res, method, url, {

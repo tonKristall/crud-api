@@ -1,13 +1,15 @@
-import * as process from 'process';
-import { createServer } from 'http';
+import process from 'process';
 import { DEFAULT_PORT } from './consts';
 import 'dotenv/config';
-import { requestListener } from './services/requestListener';
+import { balancer } from './balancer';
+import { worker } from './worker';
+import cluster from 'cluster';
 
-const PORT: number = Number(process.env.PORT) || DEFAULT_PORT;
+const { MODE } = process.env;
 
-export const server = createServer(requestListener);
+const port = cluster.isPrimary
+  ? Number(process.env.PORT) || DEFAULT_PORT
+  : Number(process.env.workerPort);
+const isBalancer = MODE === 'balancer' && cluster.isPrimary;
 
-server.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
-});
+isBalancer ? balancer(port) : worker(port);

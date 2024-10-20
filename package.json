@@ -6,6 +6,8 @@
   "scripts": {
     "start:dev": "cross-env NODE_ENV=development nodemon",
     "start:prod": "cross-env NODE_ENV=production npm run build && node dist/index.js",
+    "start:multi:dev": "cross-env NODE_ENV=development MODE=balancer nodemon",
+    "start:multi:prod": "cross-env NODE_ENV=production npm run build && cross-env MODE=balancer node dist/index.js",
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint \"src/**/*.ts\" --fix",
