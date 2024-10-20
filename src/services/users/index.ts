@@ -1,11 +1,12 @@
-import { ERRORS, METHODS, SERVICES } from '../consts';
+import { ERRORS, METHODS, REGEX, SERVICES } from '../consts';
 import { IncomingMessage, ServerResponse } from 'http';
-import { ENDPOINTS } from './consts';
+import { ENDPOINTS, USER_ERRORS } from './consts';
 import { errorsHandler } from '../errorsHandler';
 import { getUsersList } from './getUsersList';
 import { createUser } from './createUser';
 import { getUsersItem } from './getUsersItem';
 import { deleteUsersItem } from './deleteUsersItem';
+import { editUsersItem } from './editUsersItem';
 
 export const usersService = async (
   req: IncomingMessage,
@@ -26,10 +27,14 @@ export const usersService = async (
       break;
     case endpoint.match(ENDPOINTS.id)?.[0]:
       const id = endpoint.match(ENDPOINTS.id)?.[1];
-      if (method === METHODS.GET) {
+      if (!(id && id.match(REGEX.UUID))) {
+        errorsHandler(USER_ERRORS.UUID, res, method, url);
+      } else if (method === METHODS.GET) {
         getUsersItem(res, method, url, id);
       } else if (method === METHODS.DELETE) {
         deleteUsersItem(res, method, url, id);
+      } else if (method === METHODS.PUT) {
+        await editUsersItem(req, res, method, url, id);
       } else {
         errorsHandler(ERRORS.METHODS_NOT_SUPPORTED, res, method, url);
       }
