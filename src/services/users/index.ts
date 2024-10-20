@@ -5,6 +5,7 @@ import { errorsHandler } from '../errorsHandler';
 import { getUsersList } from './getUsersList';
 import { createUser } from './createUser';
 import { getUsersItem } from './getUsersItem';
+import { deleteUsersItem } from './deleteUsersItem';
 
 export const usersService = async (
   req: IncomingMessage,
@@ -24,8 +25,11 @@ export const usersService = async (
       }
       break;
     case endpoint.match(ENDPOINTS.id)?.[0]:
+      const id = endpoint.match(ENDPOINTS.id)?.[1];
       if (method === METHODS.GET) {
-        getUsersItem(res, method, url, endpoint.match(ENDPOINTS.id)?.[1]);
+        getUsersItem(res, method, url, id);
+      } else if (method === METHODS.DELETE) {
+        deleteUsersItem(res, method, url, id);
       } else {
         errorsHandler(ERRORS.METHODS_NOT_SUPPORTED, res, method, url);
       }
