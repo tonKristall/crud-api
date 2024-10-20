@@ -9,10 +9,9 @@ export const requestListener = async (
 ) => {
   try {
     if (!req.url) {
-      errorsHandler(ERRORS.SERVICE_NOT_FOUND, res);
+      errorsHandler(ERRORS.SERVICE_NOT_FOUND, res, req.method, req.url);
       throw new Error(ERRORS.SERVICE_NOT_FOUND.message);
     }
-
     const url = req.url
       .toLowerCase()
       .split('/')
@@ -21,12 +20,12 @@ export const requestListener = async (
     const method = req.method?.toLowerCase() || '';
 
     if (url.startsWith(PATH.USERS)) {
-      usersService(url, method, res);
+      await usersService(req, res, method, url);
     } else {
-      errorsHandler(ERRORS.SERVICE_NOT_FOUND, res, method, url);
+      errorsHandler(ERRORS.SERVICE_NOT_FOUND, res, req.method, req.url);
     }
   } catch (error) {
-    errorsHandler(ERRORS.SERVER_ERROR, res);
+    errorsHandler(ERRORS.SERVER_ERROR, res, req.method, req.url);
     console.error(error);
   }
 };

@@ -2,12 +2,11 @@ import { ERRORS } from './consts';
 import { ServerResponse } from 'http';
 
 export const errorsHandler = (
-  { code, message }: (typeof ERRORS)[keyof typeof ERRORS],
+  { code, message }: { code: number; message: string },
   res: ServerResponse,
-  method?: string,
-  url?: string,
+  ...logParams: Array<unknown>
 ) => {
   res.statusCode = code;
   res.end(message);
-  console.error(`${message}: ${method} ${url}`);
+  console.error(`${message}: ${JSON.stringify(logParams)}`);
 };

@@ -1,18 +1,26 @@
 import { ERRORS, METHODS, PATH } from '../consts';
-import { users } from '../../db/users';
-import { ServerResponse } from 'http';
+import { IncomingMessage, ServerResponse } from 'http';
 import { ENDPOINTS } from './consts';
 import { errorsHandler } from '../errorsHandler';
+import { getUsersList } from './getUsersList';
+import { createUser } from './createUser';
 
-export const usersService = (
-  url: string,
-  method: string,
+export const usersService = async (
+  req: IncomingMessage,
   res: ServerResponse,
+  method: string,
+  url: string,
 ) => {
   const endpoint = url.replace(PATH.USERS, '');
   switch (endpoint) {
     case ENDPOINTS.root:
-      res.end(JSON.stringify(users));
+      if (method === METHODS.GET) {
+        getUsersList(res);
+      } else if (method === METHODS.POST) {
+        await createUser(req, res, method, url);
+      } else {
+        errorsHandler(ERRORS.METHODS_NOT_SUPPORTED, res, method, url);
+      }
       break;
     case METHODS.POST:
       res.end('POST!');
