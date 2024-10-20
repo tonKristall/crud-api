@@ -1,5 +1,5 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { PATH, ERRORS } from './consts';
+import { SERVICES, ERRORS } from './consts';
 import { usersService } from './users';
 import { errorsHandler } from './errorsHandler';
 
@@ -12,6 +12,7 @@ export const requestListener = async (
       errorsHandler(ERRORS.SERVICE_NOT_FOUND, res, req.method, req.url);
       throw new Error(ERRORS.SERVICE_NOT_FOUND.message);
     }
+
     const url = req.url
       .toLowerCase()
       .split('/')
@@ -19,7 +20,7 @@ export const requestListener = async (
       .join('/');
     const method = req.method?.toLowerCase() || '';
 
-    if (url.startsWith(PATH.USERS)) {
+    if (url.startsWith(SERVICES.USERS)) {
       await usersService(req, res, method, url);
     } else {
       errorsHandler(ERRORS.SERVICE_NOT_FOUND, res, req.method, req.url);

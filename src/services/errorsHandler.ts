@@ -1,4 +1,3 @@
-import { ERRORS } from './consts';
 import { ServerResponse } from 'http';
 
 export const errorsHandler = (

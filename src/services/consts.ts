@@ -1,4 +1,4 @@
-export const PATH = {
+export const SERVICES = {
   USERS: 'api/users',
 } as const;
 
@@ -23,3 +23,7 @@ export const ERRORS = {
     message: 'Server error',
   },
 } as const;
+
+export const REGEX = {
+  UUID: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
+};
