@@ -12,15 +12,15 @@ export const METHODS = {
 export const ERRORS = {
   SERVICE_NOT_FOUND: {
     code: 404,
-    message: 'Service not found',
+    message: { message: 'Service not found' },
   },
   METHODS_NOT_SUPPORTED: {
-    code: 405,
-    message: 'Methods not supported',
+    code: 404,
+    message: { message: 'Methods not supported' },
   },
   SERVER_ERROR: {
     code: 500,
-    message: 'Server error',
+    message: { message: 'Server error' },
   },
 } as const;
 

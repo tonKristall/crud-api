@@ -10,7 +10,7 @@ export const requestListener = async (
   try {
     if (!req.url) {
       errorsHandler(ERRORS.SERVICE_NOT_FOUND, res, req.method, req.url);
-      throw new Error(ERRORS.SERVICE_NOT_FOUND.message);
+      throw new Error(ERRORS.SERVICE_NOT_FOUND.message.message);
     }
 
     const url = req.url
@@ -19,6 +19,7 @@ export const requestListener = async (
       .filter((part) => !!part)
       .join('/');
     const method = req.method?.toLowerCase() || '';
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
 
     if (url.startsWith(SERVICES.USERS)) {
       await usersService(req, res, method, url);

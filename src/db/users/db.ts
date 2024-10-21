@@ -42,3 +42,9 @@ export const deleteUser = async (id: string): Promise<void> => {
     await writeFile(filePath, JSON.stringify(users, null, 2));
   } catch (err) {}
 };
+
+export const clearUsers = async (): Promise<void> => {
+  try {
+    await writeFile(filePath, JSON.stringify([]));
+  } catch (err) {}
+};

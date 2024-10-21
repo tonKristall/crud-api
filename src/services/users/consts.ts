@@ -6,14 +6,14 @@ export const ENDPOINTS = {
 export const USER_ERRORS = {
   CREATE: {
     code: 400,
-    message: 'User params invalid',
+    message: { message: 'User params invalid' },
   },
   UUID: {
     code: 400,
-    message: 'User UUID invalid',
+    message: { message: 'User UUID invalid' },
   },
   FIND: {
     code: 404,
-    message: 'User not found',
+    message: { message: 'User not found' },
   },
 };

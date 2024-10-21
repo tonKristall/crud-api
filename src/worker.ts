@@ -18,4 +18,6 @@ export const worker = (port: number) => {
   server.listen(port, () => {
     console.log(`${type} listening on port ${port}`);
   });
+
+  return server;
 };
